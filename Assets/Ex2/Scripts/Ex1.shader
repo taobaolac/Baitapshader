@@ -35,17 +35,18 @@ Shader "Unlit/Ex1"
             sampler2D _MainTex;
             float4 _Rotate;
             float4 _MainTex_ST;
-            float2 pivot = float2(0.5, 0.5);
+            float _Angle;
             v2f vert (appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
+                float2 pivot = float2(0.5, 0.5);
                 float cosAngle = cos(_Angle);
                 float sinAngle = sin(_Angle);
                 float2x2 rot = float2x2(cosAngle, -sinAngle, sinAngle, cosAngle);
-                float2 uv = v.texcoord.xy - pivot;
+                float2 uv = v.uv.xy - pivot;
                 o.uv = mul(rot, uv);
-                o.uv += pivot;
+                o.uv+= pivot;
                 return o;
             }
 
