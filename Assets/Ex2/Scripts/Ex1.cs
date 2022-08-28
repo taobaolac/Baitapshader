@@ -5,9 +5,12 @@ using UnityEngine;
 public class Ex1 : MonoBehaviour
 {
     public MeshFilter meshFilter;
+    public Material mat;
+    public Color color;
     // Start is called before the first frame update
     void Start()
     {
+        mat = GetComponent<Renderer>().material;
         Mesh mesh = new Mesh();
         mesh.vertices = new Vector3[]
         {
@@ -28,12 +31,33 @@ public class Ex1 : MonoBehaviour
             Vector3.up,
             Vector3.up,
         };
-        mesh.uv = new Vector2[]
+        mesh.SetUVs(0, new Vector2[]
         {
             new Vector2(0,0),
             new Vector2(1,0),
             new Vector2(1,1),
             new Vector2(0,1)
+        });
+        //mesh.SetUVs(1, new Vector2[]
+        //{
+        //    new Vector2(0,0),
+        //    new Vector2(1,0),
+        //    new Vector2(1,1),
+        //    new Vector2(0,1)
+        //});
+        //mesh.SetUVs(2, new Vector2[]
+        //{
+        //    new Vector2(0,0),
+        //    new Vector2(1,0),
+        //    new Vector2(1,1),
+        //    new Vector2(0,1)
+        //});
+        mesh.colors=new Color[]
+        {
+            color,
+            color,
+            color,
+            color
         };
         meshFilter.mesh = mesh;
 
@@ -42,6 +66,8 @@ public class Ex1 : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        var x = Mathf.Cos(Time.time);
+        var y = Mathf.Sin(Time.time);
+        mat.SetVector("Rotate", new Vector4(x, y,0,0));
     }
 }
