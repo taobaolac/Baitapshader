@@ -117,8 +117,20 @@ public class CreatCircle : MonoBehaviour
         #endregion
         listVrtAllSide.AddRange(listVrtUpside);
         listVrtAllSide.AddRange(listVrtDownside);
+        #region normalUpandDown
+        for (int i = 0; i < listVrtDownside.Count; i++)
+        {
+            listNormal.Add(new Vector3(0, -1, 0));
+        }
+        for (int i = listVrtUpside.Count; i < listVrtAllSide.Count; i++)
+        {
+            listNormal.Add(new Vector3(0, 1, 0));
+        }
+        #endregion
         #region Draw SideFace
-        for (int i = 0; i < listVrtUpside.Count / 2 - 1; i++)
+        listVrtAllSide.AddRange(listVrtUpside);
+        listVrtAllSide.AddRange(listVrtDownside);
+        for (int i = 2*listVrtDownside.Count; i < 2 * listVrtDownside.Count+ listVrtUpside.Count / 2 - 1; i++)
         {
             int index0 = i;
             int index2 = i + listVrtUpside.Count;
@@ -127,7 +139,7 @@ public class CreatCircle : MonoBehaviour
             listTriangles.Add(index1);
             listTriangles.Add(index2);
         }
-        for (int i = 0; i < listVrtDownside.Count / 2 - 1; i++)
+        for (int i = 2 * listVrtDownside.Count; i < 2 * listVrtDownside.Count + listVrtDownside.Count / 2 - 1; i++)
         {
             int index0 = i + listVrtUpside.Count;
             int index1 = i + 1;
@@ -136,7 +148,7 @@ public class CreatCircle : MonoBehaviour
             listTriangles.Add(index1);
             listTriangles.Add(index2);
         }
-        for (int i = listVrtUpside.Count / 2; i < listVrtUpside.Count - 1; i++)
+        for (int i = 2 * listVrtDownside.Count+ listVrtUpside.Count / 2; i < 2 * listVrtDownside.Count+ listVrtUpside.Count - 1; i++)
         {
             int index0 = i;
             int index1 = i + listVrtUpside.Count;
@@ -145,7 +157,7 @@ public class CreatCircle : MonoBehaviour
             listTriangles.Add(index1);
             listTriangles.Add(index2);
         }
-        for (int i = listVrtDownside.Count / 2; i < listVrtDownside.Count - 1; i++)
+        for (int i = 2 * listVrtDownside.Count+ listVrtDownside.Count / 2; i < 2 * listVrtDownside.Count+ listVrtDownside.Count - 1; i++)
         {
             int index0 = i + listVrtUpside.Count;
             int index2 = i + 1;
@@ -155,29 +167,67 @@ public class CreatCircle : MonoBehaviour
             listTriangles.Add(index2);
         }
         #endregion
+        #region normalSide
+        for (int i = listVrtAllSide.Count/2; i < listVrtAllSide.Count/2+listVrtUpside.Count/2; i++)
+        {
+            listNormal.Add((listVrtAllSide[i] - center).normalized);
+        }
+        for (int i = listVrtAllSide.Count / 2+ listVrtUpside.Count / 2; i < listVrtAllSide.Count - listVrtUpside.Count; i++)
+        {
+            listNormal.Add((center-listVrtAllSide[i]).normalized);
+        }
+        for (int i = listVrtAllSide.Count- listVrtDownside.Count; i < listVrtAllSide.Count - listVrtDownside.Count / 2; i++)
+        {
+            listNormal.Add((listVrtAllSide[i] - centerA).normalized);
+        }
+        for (int i = listVrtAllSide.Count- listVrtDownside.Count / 2; i < listVrtAllSide.Count; i++)
+        {
+            listNormal.Add((centerA - listVrtAllSide[i]).normalized);
+        }
+        #endregion
         #region Draw Complete
         if (render >= step)
         {
-            listTriangles.Add(listVrtUpside.Count / 2 - 1);
-            listTriangles.Add(listVrtDownside.Count);
-            listTriangles.Add(listVrtDownside.Count / 2 - 1 + listVrtUpside.Count);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count / 2 - 1]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtDownside.Count]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtDownside.Count / 2 - 1 + listVrtUpside.Count]);
 
-            listTriangles.Add(listVrtUpside.Count / 2 - 1);
-            listTriangles.Add(0);
-            listTriangles.Add(listVrtDownside.Count);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count / 2 - 1]);
+            listVrtAllSide.Add(listVrtAllSide[0]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtDownside.Count]);
 
-            listTriangles.Add(listVrtUpside.Count - 1);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count - 1]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count * 2 - 1]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtDownside.Count / 2]);
+
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count * 2 - 1]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtDownside.Count / 2 + listVrtUpside.Count]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtDownside.Count / 2]);
+
+            listTriangles.Add(listVrtAllSide.Count - 12);
+            listTriangles.Add(listVrtAllSide.Count - 11);
+            listTriangles.Add(listVrtAllSide.Count - 10);
+
+            listTriangles.Add(listVrtAllSide.Count-9);
+            listTriangles.Add(listVrtAllSide.Count - 8);
+            listTriangles.Add(listVrtAllSide.Count - 7);
+
+            listTriangles.Add(listVrtAllSide.Count -6);
+            listTriangles.Add(listVrtAllSide.Count - 5);
+            listTriangles.Add(listVrtAllSide.Count - 4);
+
+            listTriangles.Add(listVrtAllSide.Count -3);
+            listTriangles.Add(listVrtAllSide.Count - 2);
             listTriangles.Add(listVrtAllSide.Count - 1);
-            listTriangles.Add(listVrtDownside.Count / 2);
 
 
-            listTriangles.Add(listVrtAllSide.Count - 1);
-            listTriangles.Add(listVrtDownside.Count / 2 + listVrtUpside.Count);
-            listTriangles.Add(listVrtDownside.Count / 2);
+            //listTriangles.Add(listVrtAllSide.Count - 1);
+            //listTriangles.Add(listVrtDownside.Count / 2 + listVrtUpside.Count);
+            //listTriangles.Add(listVrtDownside.Count / 2);
 
             int index0 = listVrtUpside.Count;
-            int index1 = (listVrtDownside.Count / 2) + ((listVrtDownside.Count / 2)  - 1) % (listVrtDownside.Count / 2) + listVrtUpside.Count;
-            int index2 =  (listVrtDownside.Count / 2) + listVrtUpside.Count;
+            int index1 = (listVrtDownside.Count / 2) + ((listVrtDownside.Count / 2) - 1) % (listVrtDownside.Count / 2) + listVrtUpside.Count;
+            int index2 = (listVrtDownside.Count / 2) + listVrtUpside.Count;
             listTriangles.Add(index0);
             listTriangles.Add(index2);
             listTriangles.Add(index1);
@@ -205,36 +255,42 @@ public class CreatCircle : MonoBehaviour
         }
         else
         {
-            listTriangles.Add(0);
-            listTriangles.Add(listVrtUpside.Count);
-            listTriangles.Add(listVrtUpside.Count + listVrtDownside.Count / 2);
+            listVrtAllSide.Add(listVrtAllSide[0]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count + listVrtDownside.Count / 2]);
+            listVrtAllSide.Add(listVrtAllSide[0]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count + listVrtDownside.Count / 2]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count / 2]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count - 1]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count+listVrtDownside.Count-1]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count + listVrtDownside.Count / 2 - 1]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count - 1]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count + listVrtDownside.Count / 2 - 1]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count/2-1]);
+            listTriangles.Add(listVrtAllSide.Count - 12);
+            listTriangles.Add(listVrtAllSide.Count - 11);
+            listTriangles.Add(listVrtAllSide.Count - 10);
 
-            listTriangles.Add(0);
-            listTriangles.Add(listVrtUpside.Count + listVrtDownside.Count / 2);
-            listTriangles.Add(listVrtUpside.Count / 2);
+            listTriangles.Add(listVrtAllSide.Count - 9);
+            listTriangles.Add(listVrtAllSide.Count - 8);
+            listTriangles.Add(listVrtAllSide.Count - 7);
 
-            listTriangles.Add(listVrtUpside.Count - 1);
+            listTriangles.Add(listVrtAllSide.Count - 6);
+            listTriangles.Add(listVrtAllSide.Count - 5);
+            listTriangles.Add(listVrtAllSide.Count - 4);
+
+            listTriangles.Add(listVrtAllSide.Count - 3);
+            listTriangles.Add(listVrtAllSide.Count - 2);
             listTriangles.Add(listVrtAllSide.Count - 1);
-            listTriangles.Add(listVrtUpside.Count + listVrtDownside.Count / 2 - 1);
-
-            listTriangles.Add(listVrtUpside.Count - 1);
-            listTriangles.Add(listVrtUpside.Count + listVrtDownside.Count / 2 - 1);
-            listTriangles.Add(listVrtUpside.Count / 2 - 1);
-
+            for (int i = listVrtAllSide.Count-12; i < listVrtAllSide.Count; i++)
+            {
+                listNormal.Add(Vector3.up);
+            }
         }
         #endregion
-        //for (int i = 0; i < listV3All.Count; i++)
-        //{
-        //    var go = Instantiate(cube);
-        //    go.transform.position = new Vector3(listV3All[i].x, listV3All[i].y, listV3All[i].z);
-        //}
-        //foreach (var item in listV3All)
-        //{
-        //    listNormal.Add(Vector3.up);
-        //}
         mesh.vertices = listVrtAllSide.ToArray();
         mesh.triangles = listTriangles.ToArray();
-        mesh.normals = listNormal.ToArray();
+        //mesh.normals = listNormal.ToArray();
         mesh.RecalculateNormals();
         mesh.RecalculateBounds();
         meshFilter.mesh = mesh;
@@ -243,6 +299,7 @@ public class CreatCircle : MonoBehaviour
     }
     const float delayTime=.1f;
     float time = delayTime;
+    float time2 = delayTime;
     private void Update()
     {
         if (render >= step)
@@ -250,6 +307,7 @@ public class CreatCircle : MonoBehaviour
             End();
             return;
         }
+        
         if (Input.GetMouseButton(0))
         {
             time -= Time.deltaTime;
@@ -257,6 +315,16 @@ public class CreatCircle : MonoBehaviour
             {
                 render++;
                 time = delayTime;
+            }
+        }
+        else {
+            if (render <= 0)
+                return;
+            time2 -= Time.deltaTime;
+            if (time2 <= 0)
+            {
+                render--;
+                time2 = delayTime;
             }
         }
         if (currentStep == step&&render==currentrender)
