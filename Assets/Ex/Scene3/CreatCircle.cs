@@ -188,13 +188,13 @@ public class CreatCircle : MonoBehaviour
         #region Draw Complete
         if (render >= step)
         {
-            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count / 2 - 1]);
-            listVrtAllSide.Add(listVrtAllSide[listVrtDownside.Count]);
-            listVrtAllSide.Add(listVrtAllSide[listVrtDownside.Count / 2 - 1 + listVrtUpside.Count]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count / 2 - 1 + listVrtUpside.Count]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtDownside.Count/2-1]);
+            listVrtAllSide.Add(listVrtAllSide[0]);
 
-            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count / 2 - 1]);
             listVrtAllSide.Add(listVrtAllSide[0]);
             listVrtAllSide.Add(listVrtAllSide[listVrtDownside.Count]);
+            listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count / 2 - 1 + listVrtUpside.Count]);
 
             listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count - 1]);
             listVrtAllSide.Add(listVrtAllSide[listVrtUpside.Count * 2 - 1]);
