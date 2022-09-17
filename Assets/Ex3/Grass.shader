@@ -35,11 +35,11 @@ Shader "Unlit/Grass"
             {
                 v2f o;
                 float t = _CosTime.w * 0.5 + 0.5;
-                float x= v.vertex.x*t+v.uv.x*(1-t);
+                //float x= v.vertex.x*t+v.uv.x*(1-t);
                 //t = _SinTime.w * 0.5 + 0.5;
-                float z= v.vertex.z*t+v.uv.y*(1-t);
-                
-                float4 newPos=float4(x,v.vertex.y,z,1.0);
+                //float z= v.vertex.z*t+v.uv.y*(1-t);
+                float2 xz= float2(v.vertex.x*t+v.uv.x*(1-t),v.vertex.z*t+v.uv.y*(1-t));
+                float4 newPos=float4(xz.x,v.vertex.y,xz.y,1.0);
                 o.vertex = UnityObjectToClipPos(newPos);
                 o.color=v.color;
                 return o;
