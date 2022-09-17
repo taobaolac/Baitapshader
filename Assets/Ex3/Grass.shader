@@ -30,8 +30,6 @@ Shader "Unlit/Grass"
                 float4 vertex : SV_POSITION;
                 float4 color: COLOR;
             };
-            float3 _CarvePosition;
-			float2 _CarveRadius;
 
             v2f vert (appdata v)
             {
