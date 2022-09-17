@@ -49,9 +49,9 @@ Shader "Unlit/Ex4"
                 float t1 = 1-(_CosTime.x * 0.5 + 0.5);
                 v.uv=float2 (t,0);
                 v.uv3=float2(t1,0);
+                o.uv=v.uv;
                 o.uv1 = v.uv1;
                 o.uv2=v.uv2;
-                o.uv=v.uv;
                 o.uv3=v.uv3;
                 return o;
             }
