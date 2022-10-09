@@ -1,21 +1,24 @@
-Shader "Unlit/NewUnlitShader"
+Shader "Unlit/Water"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
+        _MainTex ("Noise", 2D) = "white" {}
+        _Color("Color",Color) =(1,1,1,1)
     }
     SubShader
     {
-        Tags { "RenderType"="Opaque" }
+        Tags
+        {
+            "RenderType"="Transparent"
+            "Queue" = "Transparent"
+        }
         LOD 100
-
+        Blend SrcAlpha OneMinusSrcAlpha 
         Pass
         {
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            // make fog work
-            #pragma multi_compile_fog
 
             #include "UnityCG.cginc"
 
@@ -28,28 +31,29 @@ Shader "Unlit/NewUnlitShader"
             struct v2f
             {
                 float2 uv : TEXCOORD0;
-                UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
+                float4 color:COLOR;
             };
 
             sampler2D _MainTex;
             float4 _MainTex_ST;
-
+            float4 _Color;
             v2f vert (appdata v)
             {
                 v2f o;
-                o.vertex = UnityObjectToClipPos(v.vertex);
+                float4 newPos=float4(v.vertex.x,v.vertex.y+0.3*cos(_Time.y-v.vertex.x*2),v.vertex.z,1.0);
+                o.vertex = UnityObjectToClipPos(newPos);
+                o.color=_Color;
+                _MainTex_ST.zw+=_Time.y*.02;
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                UNITY_TRANSFER_FOG(o,o.vertex);
                 return o;
             }
-
             fixed4 frag (v2f i) : SV_Target
             {
-                // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
-                // apply fog
-                UNITY_APPLY_FOG(i.fogCoord, col);
+                float y=/*1-*/step(0.35,tex2D(_MainTex, i.uv).r)+0.9;
+                //fixed4 col =fixed4(_Color.rgb*y,_Color.a);
+                fixed4 col =float4(i.color.rgb*y,i.color.a);
+                //fixed4 col =fixed4(y,y,y,1);
                 return col;
             }
             ENDCG
